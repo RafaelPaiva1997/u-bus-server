@@ -3,7 +3,8 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var database = require('./database');
 
-const port = 8090;
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 var app = express();
 
 app.use(bodyParser.urlencoded());
@@ -108,12 +109,13 @@ app.post('/:lib/deleteOne', function(req, res) {
   });
 });
 
-app.listen(port, (err) => {
+app.listen(server_port, server_ip_address, function () {
   if (err) {
     return console.log('A base dados não conseguiu inicializar.\n', err);
   }
 
   database.connect();
 
-  console.log(`A base dados está pronta. port: ${port}\n`);
+  console.log( "Listening on " + server_ip_address + ", port " + server_port )
 });
+

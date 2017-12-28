@@ -15,8 +15,13 @@ var executer = function(lib, e, callback, execute) {
   return true;
 }
 
+var conn_string = "mongodb://localhost:27017/db";
+if(process.env.OPENSHIFT_MONGODB_DB_URL){
+  conn_string = process.env.OPENSHIFT_MONGODB_DB_URL + "db";
+}
+
 exports.connect = function() {
-  MongoClient.connect("mongodb://localhost:27017/db", function(err, db) {
+  MongoClient.connect(conn_string, function(err, db) {
     if(err) { return console.log(err); }
 
     linhas = db.collection('linhas');
